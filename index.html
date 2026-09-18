@@ -1,0 +1,2726 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HawkEye QNeCT | Official Research Portal</title>
+  
+  <!-- Fonts & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            void: {
+              950: '#030712',
+              900: '#060d20',
+              850: '#0a142e',
+              800: '#0f1f45',
+              700: '#172d63',
+            },
+            quantum: {
+              cyan: '#00f5d4',
+              cobalt: '#38bdf8',
+              violet: '#8b5cf6',
+              amber: '#f59e0b',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+            }
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 35px -5px rgba(0, 245, 212, 0.4)',
+            'glow-cobalt': '0 0 35px -5px rgba(56, 189, 248, 0.4)',
+            'glow-iris': '0 0 60px 10px rgba(0, 245, 212, 0.35)',
+            'glow-admin': '0 0 25px 2px rgba(139, 92, 246, 0.5)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #030712;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    .glass-card {
+      background: rgba(10, 20, 46, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(56, 189, 248, 0.12);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(0, 245, 212, 0.35);
+      box-shadow: 0 12px 36px -8px rgba(0, 245, 212, 0.15);
+    }
+
+    .matrix-grid {
+      background-size: 52px 52px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+    }
+
+    /* Quantum Pop-up Visual Effects */
+    @keyframes spinClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes blochTiltSpin {
+      0% { transform: rotateX(68deg) rotateZ(0deg); }
+      100% { transform: rotateX(68deg) rotateZ(360deg); }
+    }
+    @keyframes blochVerticalSpin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    @keyframes pulseWavePacket {
+      0% { transform: scale(0.65); opacity: 0.85; }
+      50% { transform: scale(1.15); opacity: 0.25; }
+      100% { transform: scale(1.45); opacity: 0; }
+    }
+    @keyframes laserSweepVertical {
+      0% { top: 0%; opacity: 0.2; }
+      50% { opacity: 0.9; }
+      100% { top: 100%; opacity: 0.2; }
+    }
+
+    .anim-spin-cw { animation: spinClockwise 22s linear infinite; }
+    .anim-spin-ccw { animation: spinCounter 16s linear infinite; }
+    .anim-spin-fast { animation: spinClockwise 7s linear infinite; }
+    .anim-bloch-orbit { animation: blochTiltSpin 14s linear infinite; transform-style: preserve-3d; }
+    .anim-bloch-vertical { animation: blochVerticalSpin 18s linear infinite; transform-style: preserve-3d; }
+    .anim-pulse-packet { animation: pulseWavePacket 3s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+    .anim-laser-sweep { animation: laserSweepVertical 2.4s ease-in-out infinite; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #030712; }
+    ::-webkit-scrollbar-thumb { background: #0f1f45; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
+  </style>
+</head>
+
+<body class="selection:bg-quantum-cyan selection:text-void-950 font-sans relative antialiased matrix-grid">
+
+  <!-- ======================================================== -->
+  <!-- HAWKEYE QUANTUM POPUP WINDOW & OPENING SEQUENCE          -->
+  <!-- ======================================================== -->
+  <div id="hawkeyeSplash" class="fixed inset-0 z-[100] flex items-center justify-center bg-void-950/95 backdrop-blur-2xl transition-opacity duration-700">
+    
+    <!-- Quantum Ambient Glows -->
+    <div class="absolute w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute w-[420px] h-[420px] bg-violet-600/15 rounded-full blur-[130px] pointer-events-none"></div>
+
+    <!-- Quantum Flash Overlay on State Collapse -->
+    <div id="quantumCollapseFlash" class="absolute inset-0 bg-white pointer-events-none opacity-0 z-50 transition-opacity duration-500"></div>
+
+    <!-- Quantum Instrument Holographic Frame -->
+    <div id="hawkeyeWindow" class="relative w-full max-w-4xl mx-4 rounded-3xl bg-void-900/90 border border-cyan-400/30 p-6 sm:p-8 shadow-2xl shadow-cyan-950/80 overflow-hidden transition-transform duration-500">
+      
+      <!-- Top HUD Telemetry Strip -->
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10 font-mono text-xs">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2.5 h-2.5 rounded-full bg-quantum-cyan animate-ping"></div>
+          <span class="text-white font-bold tracking-wider">HAWKEYE QUANTUM APERTURE SYSTEM</span>
+          <span class="text-cyan-400/70 hidden sm:inline">&bull; CAVITY INTERFEROMETER OGS-4</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-400 text-[11px]">HOMODYNE LOCK: <span id="homodyneLockStatus" class="text-quantum-cyan font-bold">STABILIZING</span></span>
+          <button onclick="dismissHawkEyeSplash()" class="text-gray-400 hover:text-white px-2 py-0.5 rounded border border-white/10 hover:border-cyan-400 text-[11px] transition-colors">
+            Skip Intro &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Center Quantum Optics Stage -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-2">
+        
+        <!-- Left Quantum Telemetry Column -->
+        <div class="lg:col-span-3 space-y-2.5 font-mono text-xs order-2 lg:order-1">
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">Cryo Cavity Temp</div>
+            <div class="text-quantum-cyan text-base font-bold mt-0.5">12.4 mK</div>
+            <div class="text-[10px] text-gray-500">Dilution stage optimal</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">Bloch Polar Angle (θ, φ)</div>
+            <div class="text-white text-base font-bold mt-0.5" id="polarAnglesDisplay">θ: 45.0° &bull; φ: 90.0°</div>
+            <div class="text-[10px] text-quantum-cobalt">Superposition state active</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">Memory Coherence T₂*</div>
+            <div class="text-quantum-violet text-base font-bold mt-0.5">38.2 ms</div>
+            <div class="text-[10px] text-gray-500">Atomic frequency comb</div>
+          </div>
+        </div>
+
+        <!-- Center Dynamic SVG Bloch Sphere & Interferometer Reticle -->
+        <div class="lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-2 relative py-4">
+          
+          <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+            
+            <!-- Quantum Wave Packet Density Rings -->
+            <div class="absolute inset-0 rounded-full border-2 border-cyan-400/40 anim-pulse-packet pointer-events-none"></div>
+            <div class="absolute inset-4 rounded-full border border-violet-500/30 anim-pulse-packet pointer-events-none" style="animation-delay: 1.2s;"></div>
+
+            <!-- Outer Interferometer Vernier Scale -->
+            <svg class="absolute inset-0 w-full h-full anim-spin-cw pointer-events-none" viewBox="0 0 320 320">
+              <circle cx="160" cy="160" r="150" fill="none" stroke="rgba(56, 189, 248, 0.22)" stroke-width="1.5" stroke-dasharray="3 7" />
+              <circle cx="160" cy="160" r="142" fill="none" stroke="rgba(0, 245, 212, 0.4)" stroke-width="1.5" stroke-dasharray="16 28" />
+            </svg>
+
+            <!-- Counter-Rotating Diffraction Ring with Phase Notches -->
+            <svg class="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] anim-spin-ccw pointer-events-none" viewBox="0 0 300 300">
+              <circle cx="150" cy="150" r="130" fill="none" stroke="rgba(139, 92, 246, 0.35)" stroke-width="1.2" stroke-dasharray="5 12 25 12" />
+              <line x1="150" y1="12" x2="150" y2="26" stroke="#00f5d4" stroke-width="2.5" />
+              <line x1="150" y1="274" x2="150" y2="288" stroke="#00f5d4" stroke-width="2.5" />
+              <line x1="12" y1="150" x2="26" y2="150" stroke="#00f5d4" stroke-width="2.5" />
+              <line x1="274" y1="150" x2="288" y2="150" stroke="#00f5d4" stroke-width="2.5" />
+            </svg>
+
+            <!-- 3D Bloch Sphere Projected Shells & Longitudes -->
+            <div class="absolute w-52 h-52 sm:w-60 sm:h-60 rounded-full border border-cyan-400/40 flex items-center justify-center pointer-events-none">
+              
+              <!-- Tilted Equator (XY plane) -->
+              <div class="absolute inset-0 rounded-full border border-dashed border-cyan-300/60 anim-bloch-orbit"></div>
+              
+              <!-- Rotating Meridian (XZ plane) -->
+              <div class="absolute inset-0 rounded-full border border-violet-400/40 anim-bloch-vertical"></div>
+
+              <!-- High-Speed Horizontal Laser Scanning Line -->
+              <div class="absolute left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent anim-laser-sweep"></div>
+
+              <!-- State Vector Precession Arrow: |ψ⟩ -->
+              <div class="absolute inset-0 flex items-center justify-center anim-spin-fast pointer-events-none">
+                <div class="w-1 h-28 bg-gradient-to-t from-transparent via-cyan-400 to-white relative origin-bottom -translate-y-14 rounded-full">
+                  <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-quantum-cyan shadow-glow-cyan flex items-center justify-center">
+                    <span class="text-[8px] font-bold text-void-950 font-mono">|ψ⟩</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Central Optical HawkEye Core / Pupil -->
+              <div class="relative w-16 h-16 rounded-full bg-void-950 border-2 border-quantum-cyan flex items-center justify-center shadow-glow-iris">
+                <i class="ph-bold ph-aperture text-2xl text-quantum-cyan anim-spin-cw"></i>
+                <div class="absolute inset-0 rounded-full bg-cyan-400/20 animate-pulse"></div>
+              </div>
+
+              <!-- Superposition Quantum State Labels (Bra-Ket) -->
+              <span class="absolute top-1 font-mono text-[10px] font-bold text-cyan-300 tracking-wider">|0⟩</span>
+              <span class="absolute bottom-1 font-mono text-[10px] font-bold text-cyan-300 tracking-wider">|1⟩</span>
+              <span class="absolute left-1 font-mono text-[10px] font-bold text-violet-300 tracking-wider">|-⟩</span>
+              <span class="absolute right-1 font-mono text-[10px] font-bold text-violet-300 tracking-wider">|+⟩</span>
+              <span class="absolute top-8 right-6 font-mono text-[9px] font-bold text-emerald-400">|i⟩</span>
+              <span class="absolute bottom-8 left-6 font-mono text-[9px] font-bold text-rose-400">|-i⟩</span>
+            </div>
+
+            <!-- Optical Crosshair Reticle -->
+            <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
+              <div class="h-full w-px bg-gradient-to-b from-transparent via-cyan-500/40 to-transparent absolute"></div>
+            </div>
+
+          </div>
+
+          <!-- Brand Identifier beneath optics -->
+          <div class="mt-2 text-center">
+            <span class="font-display font-black text-2xl sm:text-3xl tracking-tight text-white">
+              HawkEye <span class="text-quantum-cyan font-sans font-bold">QNeCT</span>
+            </span>
+            <p class="text-[11px] font-mono text-gray-400 tracking-widest uppercase mt-0.5">Quantum Network &amp; Communication Toolbox</p>
+          </div>
+
+        </div>
+
+        <!-- Right Live Quantum Metrics Column -->
+        <div class="lg:col-span-3 space-y-2.5 font-mono text-xs order-3">
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">State Fidelity F</div>
+            <div class="text-emerald-400 text-base font-bold mt-0.5" id="telemetryFidelity">0.9942</div>
+            <div class="text-[10px] text-gray-500">Above CHSH violation bound</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">Quantum State Purity</div>
+            <div class="text-quantum-cyan text-base font-bold mt-0.5">Tr(ρ²) = 0.989</div>
+            <div class="text-[10px] text-gray-500">Near-pure density matrix</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-void-950/80 border border-white/10">
+            <div class="text-[10px] uppercase text-gray-400">Interference Visibility</div>
+            <div class="text-quantum-cobalt text-base font-bold mt-0.5" id="telemetryVisibility">V = 98.2%</div>
+            <div class="text-[10px] text-gray-500">Homodyne carrier lock</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Step-by-Step Diagnostic Telemetry Terminal -->
+      <div class="mt-4 p-3.5 rounded-2xl bg-void-950 border border-cyan-500/20 font-mono text-xs">
+        <div class="flex items-center justify-between text-gray-400 text-[11px] pb-2 border-b border-white/5 mb-2">
+          <span class="flex items-center gap-1.5 text-cyan-300">
+            <i class="ph-bold ph-terminal-window"></i> CALIBRATION SEQUENCE
+          </span>
+          <span id="stepCounter" class="text-quantum-cyan font-bold">PHASE 1 / 6</span>
+        </div>
+        
+        <div class="flex items-center justify-between min-h-[22px]">
+          <div id="liveTelemetryLog" class="text-white text-xs sm:text-sm font-semibold truncate">
+            [01] INITIALIZING CRYOGENIC OPTICAL CAVITY (12 mK)...
+          </div>
+          <div class="w-3 h-3 rounded-full bg-quantum-cyan animate-pulse shrink-0 ml-2"></div>
+        </div>
+
+        <div class="w-full h-1.5 bg-void-900 rounded-full mt-2.5 overflow-hidden border border-white/10">
+          <div id="splashProgress" class="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 transition-all duration-300" style="width: 15%;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Interactive Quantum Particle Canvas -->
+  <canvas id="quantumCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+  <!-- Ambient Glows -->
+  <div class="fixed -top-40 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+  <div class="fixed top-1/2 -right-20 w-[30rem] h-[30rem] bg-violet-600/10 rounded-full blur-[160px] pointer-events-none z-0"></div>
+  <div class="fixed -bottom-20 left-10 w-96 h-96 bg-sky-500/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
+  <!-- Top Real-Time Status Bar -->
+  <div class="bg-void-900/90 border-b border-white/5 py-1.5 px-4 text-[11px] font-mono flex items-center justify-between z-40 relative backdrop-blur-md">
+    <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+      <span class="inline-flex items-center gap-1.5 text-quantum-cyan font-semibold">
+        <span class="w-2 h-2 rounded-full bg-quantum-cyan animate-pulse"></span>
+        HAWKEYE QNeCT TESTBED: ACTIVE
+      </span>
+      <span class="text-gray-600">|</span>
+      <span class="text-gray-400 hidden sm:inline">BELL PAIR DISTILLATION: 99.4% PURITY</span>
+      <span class="text-gray-600 hidden sm:inline">|</span>
+      <span class="text-quantum-cobalt hidden md:inline">CARRIER: 1550 nm TELECOM C-BAND</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      <button onclick="triggerHawkEyeSplash()" class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 text-quantum-cyan text-[11px] flex items-center gap-1.5 transition-all">
+        <i class="ph-bold ph-aperture"></i>
+        <span>Replay HawkEye</span>
+      </button>
+      <span class="text-gray-600 hidden sm:inline">|</span>
+      <a href="#simulator" class="text-gray-400 hover:text-white hidden sm:inline">QNeCT Workspace &rarr;</a>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="sticky top-0 z-40 w-full glass-card border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="relative w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-400 via-sky-500 to-violet-600 p-[1.5px] shadow-glow-cyan transition-transform duration-300 group-hover:scale-105">
+          <div class="w-full h-full bg-void-950 rounded-[10px] flex items-center justify-center relative overflow-hidden">
+            <i class="ph-bold ph-aperture text-quantum-cyan text-2xl group-hover:rotate-45 transition-transform duration-500"></i>
+            <div class="absolute inset-0 bg-cyan-400/10 animate-pulse pointer-events-none"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-extrabold text-xl tracking-tight text-white">HawkEye <span class="text-quantum-cyan">QNeCT</span></span>
+          </div>
+          <p class="text-[10px] text-gray-400 font-mono tracking-widest uppercase">Quantum Networks Research Group</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1 bg-void-900/80 p-1.5 rounded-full border border-white/10 font-medium text-xs text-gray-300">
+        <a href="#about" class="px-4 py-1.5 rounded-full hover:text-quantum-cyan hover:bg-white/5 transition-all">About</a>
+        <a href="#supervisor" class="px-4 py-1.5 rounded-full hover:text-quantum-cyan hover:bg-white/5 transition-all">Supervisor</a>
+        <a href="#team" class="px-4 py-1.5 rounded-full hover:text-quantum-cyan hover:bg-white/5 transition-all">Research Team</a>
+        <a href="#projects" class="px-4 py-1.5 rounded-full hover:text-quantum-cyan hover:bg-white/5 transition-all">Projects</a>
+        <a href="#simulator" class="px-4 py-1.5 rounded-full text-quantum-cyan hover:bg-cyan-500/10 transition-all font-semibold flex items-center gap-1">
+          <i class="ph-fill ph-cpu"></i> QNeCT Workspace
+        </a>
+        <a href="#publications" class="px-4 py-1.5 rounded-full hover:text-quantum-cyan hover:bg-white/5 transition-all">Publications</a>
+      </nav>
+
+      <!-- Action & Admin Buttons -->
+      <div class="flex items-center gap-3">
+        <button onclick="toggleAdminPanel()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-400/40 hover:border-violet-400 shadow-glow-admin transition-all" title="Open Admin Control Panel to edit team, projects, and supervisor">
+          <i class="ph-bold ph-sliders text-sm text-quantum-cyan"></i>
+          <span class="hidden sm:inline">Admin Mode</span>
+        </button>
+
+        <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold uppercase tracking-wider bg-gradient-to-r from-cyan-400 to-sky-500 text-void-950 hover:brightness-110 shadow-glow-cyan transition-all">
+          <i class="ph-bold ph-envelope-simple text-sm"></i>
+          <span>Lab Inquiry</span>
+        </a>
+
+        <button id="mobileMenuBtn" aria-label="Toggle Menu" class="lg:hidden text-2xl text-gray-300 hover:text-quantum-cyan p-2 rounded-lg bg-white/5 border border-white/10">
+          <i class="ph ph-list" id="menuIcon"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-white/10 px-6 py-4 bg-void-950/95 backdrop-blur-xl flex flex-col gap-3 font-mono text-sm">
+      <a href="#about" class="mobile-link text-gray-300 hover:text-quantum-cyan py-2 border-b border-white/5">About Group</a>
+      <a href="#supervisor" class="mobile-link text-gray-300 hover:text-quantum-cyan py-2 border-b border-white/5">Supervisor / PI</a>
+      <a href="#team" class="mobile-link text-gray-300 hover:text-quantum-cyan py-2 border-b border-white/5">Research Team</a>
+      <a href="#projects" class="mobile-link text-gray-300 hover:text-quantum-cyan py-2 border-b border-white/5">Projects</a>
+      <a href="#simulator" class="mobile-link text-quantum-cyan py-2 border-b border-white/5 flex items-center justify-between">
+        <span>QNeCT Simulator Workspace</span>
+        <span class="px-2 py-0.5 text-[10px] rounded bg-cyan-400/20 text-cyan-300">Interactive</span>
+      </a>
+      <a href="#publications" class="mobile-link text-gray-300 hover:text-quantum-cyan py-2 border-b border-white/5">Publications</a>
+      <button onclick="toggleAdminPanel(); document.getElementById('mobileMenu').classList.add('hidden');" class="text-left text-violet-300 py-2 border-b border-white/5 flex items-center gap-2">
+        <i class="ph-bold ph-sliders"></i>
+        <span>Admin Control Dashboard</span>
+      </button>
+      <a href="#contact" class="mobile-link text-quantum-cyan py-2 font-semibold">Contact &amp; Admissions &rarr;</a>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+
+    <!-- Hero Section -->
+    <section id="about" class="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        
+        <!-- Lab Identification Pill -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-void-850/90 border border-cyan-500/40 text-xs font-mono text-cyan-300 mb-6 shadow-glow-cyan">
+          <span class="w-2 h-2 rounded-full bg-quantum-cyan animate-pulse"></span>
+          <span>HAWKEYE QUANTUM RESEARCH COLLECTIVE &bull; QNeCT LAB</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] max-w-5xl mx-auto font-display">
+          Pioneering Inter-City <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400">Quantum Networks</span> &amp; Photonic Repeaters
+        </h1>
+
+        <p class="mt-6 text-base sm:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <strong class="text-white font-semibold">HawkEye QNeCT</strong> is an independent academic research lab focused on quantum communication architectures. We engineer cold-atom quantum memories, space-ground entanglement links, high-dimensional QKD systems, and the open-source in-house <strong class="text-quantum-cyan font-mono">QNeCT</strong> simulation toolbox.
+        </p>
+
+        <!-- Dynamic Lab Badges -->
+        <div class="mt-8 flex flex-wrap justify-center items-center gap-2.5 text-xs font-mono text-gray-300">
+          <span class="px-3 py-1.5 rounded-lg bg-void-850 border border-cyan-500/30 text-cyan-300 flex items-center gap-1.5">
+            <i class="ph-bold ph-atom"></i> Entanglement Swapping
+          </span>
+          <span class="px-3 py-1.5 rounded-lg bg-void-850 border border-sky-500/30 text-sky-300 flex items-center gap-1.5">
+            <i class="ph-bold ph-cpu"></i> 87Rb Atomic Vapor Repeaters
+          </span>
+          <span class="px-3 py-1.5 rounded-lg bg-void-850 border border-violet-500/30 text-violet-300 flex items-center gap-1.5">
+            <i class="ph-bold ph-code"></i> QNeCT Simulator Core
+          </span>
+          <span class="px-3 py-1.5 rounded-lg bg-void-850 border border-emerald-500/30 text-emerald-300 flex items-center gap-1.5">
+            <i class="ph-bold ph-shield-check"></i> Bell Non-Locality Proofs
+          </span>
+        </div>
+
+        <!-- Action CTAs -->
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="#simulator" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold font-mono text-xs uppercase tracking-wider bg-gradient-to-r from-cyan-400 via-sky-500 to-sky-600 text-void-950 hover:brightness-110 shadow-glow-cyan transition-all flex items-center justify-center gap-2">
+            <i class="ph-bold ph-terminal text-lg"></i>
+            <span>Launch QNeCT Workspace</span>
+          </a>
+          <a href="#team" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold font-mono text-xs uppercase tracking-wider glass-card text-white hover:bg-white/10 border border-white/15 transition-all flex items-center justify-center gap-2">
+            <i class="ph-bold ph-users-three text-lg text-cyan-400"></i>
+            <span>Meet Research Members</span>
+          </a>
+        </div>
+
+        <!-- Telemetry Cards (Admin Controlled) -->
+        <div class="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto" id="heroTelemetryContainer">
+          <!-- Dynamically Populated from store.telemetry -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Supervisor / PI Spotlight (Admin Controlled) -->
+    <section id="supervisor" class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col items-center text-center mb-12">
+          <span class="text-xs font-mono font-semibold uppercase tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3">Group Leadership</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">Principal Investigator &amp; Lab Supervisor</h2>
+          <div class="w-16 h-1 bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full mt-3"></div>
+        </div>
+
+        <!-- Injected from store.supervisor -->
+        <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden border border-white/10" id="supervisorContainer">
+          <!-- Dynamic Supervisor Card Content -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Research Team Grid (Admin Controlled) -->
+    <section id="team" class="py-20 relative bg-void-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono font-semibold uppercase tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3 inline-block">Scholars &amp; Staff</span>
+              <button onclick="openAddMemberModal()" class="text-xs font-mono text-quantum-cyan hover:underline flex items-center gap-1 mb-3">
+                <i class="ph-bold ph-plus-circle"></i> Add Member
+              </button>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">HawkEye QNeCT Research Members</h2>
+            <p class="text-gray-400 text-sm mt-2 font-mono">Specializing in optical physics, simulator architecture, cryogenics, and Bell routing.</p>
+          </div>
+
+          <!-- Team Filter Controls -->
+          <div class="mt-6 md:mt-0 flex flex-wrap gap-2 p-1.5 rounded-xl bg-void-850 border border-white/10" id="teamFilterContainer">
+            <button data-filter="all" class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all bg-gradient-to-r from-cyan-400 to-sky-600 text-void-950 font-bold shadow-sm">All Members</button>
+            <button data-filter="postdoc" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white hover:bg-white/5 transition-all">Postdocs</button>
+            <button data-filter="phd" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white hover:bg-white/5 transition-all">PhD Scholars</button>
+            <button data-filter="engineer" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white hover:bg-white/5 transition-all">Engineers</button>
+            <button data-filter="jrf" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white hover:bg-white/5 transition-all">JRF Fellows</button>
+          </div>
+        </div>
+
+        <!-- Team Grid Cards (Populated Dynamically) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="teamGrid">
+          <!-- Dynamically Injected from store.team -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Research Projects Portfolio (Admin Controlled) -->
+    <section id="projects" class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono font-semibold uppercase tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3 inline-block">Missions &amp; R&amp;D</span>
+              <button onclick="openAddProjectModal()" class="text-xs font-mono text-quantum-cyan hover:underline flex items-center gap-1 mb-3">
+                <i class="ph-bold ph-plus-circle"></i> Add Project
+              </button>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">Active Research Projects</h2>
+            <p class="text-gray-400 text-sm mt-2 font-mono">Foundational hardware, protocol theory, and open simulation software.</p>
+          </div>
+          <span class="mt-4 md:mt-0 px-3.5 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-400/30 text-xs font-mono text-cyan-300 flex items-center gap-2" id="projectCountBadge">
+            <i class="ph-fill ph-check-circle text-emerald-400"></i> Programs Fully Active
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="projectsGrid">
+          <!-- Dynamically Injected from store.projects -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- In-House QNeCT Simulator Workspace -->
+    <section id="simulator" class="py-20 relative bg-void-900/60 border-y border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-xs font-mono text-cyan-300 mb-3">
+            <i class="ph-fill ph-code"></i> IN-HOUSE RESEARCH TOOLBOX
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">QNeCT Simulator Workspace</h2>
+          <p class="text-sm text-gray-300 mt-3 font-mono">
+            Developed within HawkEye QNeCT to simulate non-local Bell state distribution across multi-hop repeater architectures. Test the live parameter simulator below.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 relative overflow-hidden border border-cyan-500/20">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- Controls & Sliders -->
+            <div class="lg:col-span-6 space-y-6">
+              
+              <div>
+                <div class="flex justify-between items-center text-xs font-mono mb-2">
+                  <span class="text-gray-300 font-bold uppercase">Spool Distance (Fiber Link)</span>
+                  <span id="distanceDisplay" class="text-quantum-cyan font-bold text-sm">45 km</span>
+                </div>
+                <input 
+                  type="range" 
+                  id="distanceSlider" 
+                  min="5" 
+                  max="150" 
+                  value="45" 
+                  oninput="updateSimulator()"
+                  class="w-full h-2 bg-void-950 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+                <div class="flex justify-between text-[10px] text-gray-500 font-mono mt-1">
+                  <span>5 km (Metropolitan)</span>
+                  <span>75 km</span>
+                  <span>150 km (Inter-city)</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center text-xs font-mono mb-2">
+                  <span class="text-gray-300 font-bold uppercase">Depolarizing Channel Noise (&gamma;)</span>
+                  <span id="noiseDisplay" class="text-sky-400 font-bold text-sm">0.03</span>
+                </div>
+                <input 
+                  type="range" 
+                  id="noiseSlider" 
+                  min="0" 
+                  max="0.25" 
+                  step="0.01" 
+                  value="0.03" 
+                  oninput="updateSimulator()"
+                  class="w-full h-2 bg-void-950 rounded-lg appearance-none cursor-pointer accent-sky-400"
+                />
+                <div class="flex justify-between text-[10px] text-gray-500 font-mono mt-1">
+                  <span>0.00 (Ideal Vacuum)</span>
+                  <span>0.12 (Standard SMF-28)</span>
+                  <span>0.25 (High Decoherence)</span>
+                </div>
+              </div>
+
+              <!-- Output Telemetry -->
+              <div class="grid grid-cols-3 gap-3 pt-2 font-mono">
+                <div class="p-3.5 rounded-xl bg-void-950 border border-white/10">
+                  <span class="text-[10px] uppercase text-gray-400 block">Bell Fidelity F</span>
+                  <span id="simFidelity" class="text-xl font-bold text-emerald-400 mt-1 block">0.962</span>
+                  <span class="text-[10px] text-gray-500">&langle;&Phi;&plus;|&rho;|&Phi;&plus;&rangle;</span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-void-950 border border-white/10">
+                  <span class="text-[10px] uppercase text-gray-400 block">State Purity</span>
+                  <span id="simPurity" class="text-xl font-bold text-quantum-cyan mt-1 block">0.928</span>
+                  <span class="text-[10px] text-gray-500">Tr(&rho;&sup2;)</span>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-void-950 border border-white/10">
+                  <span class="text-[10px] uppercase text-gray-400 block">CHSH Parameter</span>
+                  <span id="simChsh" class="text-xl font-bold text-sky-300 mt-1 block">2.68</span>
+                  <span class="text-[10px] text-emerald-400">Violates &le; 2.0</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Simulator Code Sandbox -->
+            <div class="lg:col-span-6 bg-void-950 rounded-2xl p-5 border border-white/10 font-mono text-xs relative">
+              <div class="flex items-center justify-between pb-3 border-b border-white/10 text-gray-400">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                  <span class="text-gray-300 ml-2 font-bold text-[11px]">simulation_pipeline.py</span>
+                </div>
+                <button onclick="copyPythonCode()" class="text-cyan-400 hover:text-cyan-300 text-[11px] flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy Code
+                </button>
+              </div>
+
+              <pre id="codeSandbox" class="mt-4 text-gray-300 overflow-x-auto leading-relaxed text-[11px]">
+<span class="text-violet-400">import</span> <span class="text-cyan-300">qnect</span> <span class="text-violet-400">as</span> <span class="text-cyan-300">qn</span>
+
+<span class="text-gray-500"># Configure HawkEye QNeCT simulation network</span>
+net = qn.QuantumNetwork(name=<span class="text-emerald-300">"HawkEye-Urban-Link"</span>)
+alice = net.add_node(<span class="text-emerald-300">"Alice"</span>, memory_type=<span class="text-emerald-300">"87Rb"</span>)
+bob = net.add_node(<span class="text-emerald-300">"Bob"</span>, memory_type=<span class="text-emerald-300">"87Rb"</span>)
+
+<span class="text-gray-500"># Link fiber parameters</span>
+link = net.connect_nodes(alice, bob, distance_km=<span class="text-cyan-300" id="codeDist">45</span>, loss_db_km=<span class="text-cyan-300">0.20</span>)
+link.apply_noise(qn.noise.DepolarizingChannel(gamma=<span class="text-cyan-300" id="codeNoise">0.03</span>))
+
+<span class="text-gray-500"># Execute entanglement swapping &amp; measure state</span>
+rho = net.run_swapping_protocol(fidelity_threshold=<span class="text-cyan-300">0.85</span>)
+print(f<span class="text-emerald-300">"Bell Fidelity: {rho.fidelity():.4f}"</span>)
+</pre>
+
+              <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px]">
+                <span class="text-gray-500">Install via PyPI:</span>
+                <span class="px-2.5 py-1 rounded bg-void-900 border border-cyan-400/30 text-quantum-cyan select-all">pip install qnect-toolbox</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Publications Section (Admin Controlled) -->
+    <section id="publications" class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono font-semibold uppercase tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3 inline-block">Dissemination</span>
+              <button onclick="openAddPublicationModal()" class="text-xs font-mono text-quantum-cyan hover:underline flex items-center gap-1 mb-3">
+                <i class="ph-bold ph-plus-circle"></i> Add Paper
+              </button>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">Recent Publications</h2>
+            <p class="text-gray-400 text-sm mt-2 font-mono">Peer-reviewed quantum networks and photonic communication papers.</p>
+          </div>
+          <a href="https://scholar.google.com" target="_blank" class="mt-4 md:mt-0 text-xs font-mono text-quantum-cyan hover:underline flex items-center gap-1">
+            <span>View Group Papers on Google Scholar</span>
+            <i class="ph-bold ph-arrow-up-right"></i>
+          </a>
+        </div>
+
+        <div class="space-y-4" id="publicationsList">
+          <!-- Dynamically Injected from store.publications -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact & Collaboration Gateway (Admin Controlled Coordinates) -->
+    <section id="contact" class="py-20 relative bg-void-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          <div class="lg:col-span-5" id="contactInfoContainer">
+            <!-- Dynamically Injected from store.contact -->
+          </div>
+
+          <!-- Contact Form -->
+          <div class="lg:col-span-7">
+            <div class="glass-card p-8 sm:p-10 rounded-3xl relative">
+              <h3 class="text-lg font-bold text-white font-mono mb-4">Laboratory Inquiry Form</h3>
+
+              <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-mono text-gray-300 uppercase mb-1.5" for="senderName">Your Full Name *</label>
+                    <input 
+                      type="text" 
+                      id="senderName" 
+                      required 
+                      placeholder="e.g. Dr. Rajesh Sharma" 
+                      class="w-full bg-void-950 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 font-mono placeholder:text-gray-600 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-mono text-gray-300 uppercase mb-1.5" for="senderEmail">Email Address *</label>
+                    <input 
+                      type="email" 
+                      id="senderEmail" 
+                      required 
+                      placeholder="name@university.ac.in" 
+                      class="w-full bg-void-950 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 font-mono placeholder:text-gray-600 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-mono text-gray-300 uppercase mb-1.5" for="affiliation">Workplace / Institution *</label>
+                    <input 
+                      type="text" 
+                      id="affiliation" 
+                      required
+                      placeholder="e.g. IISc, IIT, TIFR, Industry" 
+                      class="w-full bg-void-950 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 font-mono placeholder:text-gray-600 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-mono text-gray-300 uppercase mb-1.5" for="inquiryType">Category</label>
+                    <select 
+                      id="inquiryType" 
+                      class="w-full bg-void-950 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 font-mono transition-colors"
+                    >
+                      <option value="postdoc">Postdoctoral Fellowship</option>
+                      <option value="phd">PhD Admissions / JRF</option>
+                      <option value="qnect">QNeCT Simulator Collaboration</option>
+                      <option value="hardware">Joint Optical Testbed Pilot</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-mono text-gray-300 uppercase mb-1.5" for="messageContent">Research Interest / Statement *</label>
+                  <textarea 
+                    id="messageContent" 
+                    rows="4" 
+                    required 
+                    placeholder="Describe your research proposal, background, or simulator use-case..." 
+                    class="w-full bg-void-950 border border-white/15 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-cyan-400 font-mono placeholder:text-gray-600 transition-colors"
+                  ></textarea>
+                </div>
+
+                <div id="formFeedback" class="hidden p-3 rounded-xl text-xs font-mono"></div>
+
+                <button 
+                  type="submit" 
+                  id="submitBtn"
+                  class="w-full py-3.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-400 via-sky-500 to-sky-600 text-void-950 hover:brightness-110 shadow-glow-cyan transition-all flex items-center justify-center gap-2"
+                >
+                  <i class="ph-bold ph-paper-plane-tilt"></i>
+                  <span>Transmit Inquiry to Lab</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 bg-void-950 relative z-10 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-sky-500 flex items-center justify-center text-void-950 font-black">
+            <i class="ph-bold ph-aperture text-base"></i>
+          </div>
+          <span class="font-display font-extrabold text-lg text-white tracking-tight">HawkEye <span class="text-quantum-cyan">QNeCT</span></span>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-400 font-mono">
+          <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+          <a href="#supervisor" class="hover:text-cyan-400 transition-colors">Supervisor</a>
+          <a href="#team" class="hover:text-cyan-400 transition-colors">Team Members</a>
+          <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
+          <a href="#simulator" class="hover:text-cyan-400 transition-colors">QNeCT Workspace</a>
+          <a href="#publications" class="hover:text-cyan-400 transition-colors">Publications</a>
+          <button onclick="toggleAdminPanel()" class="text-violet-300 hover:text-white flex items-center gap-1">
+            <i class="ph-bold ph-gear"></i> Admin Panel
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 font-mono gap-4">
+        <p>&copy; 2026 HawkEye QNeCT Research Group. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <button onclick="triggerHawkEyeSplash()" class="text-quantum-cyan hover:underline flex items-center gap-1">
+            <i class="ph-bold ph-aperture"></i> Replay HawkEye Startup
+          </button>
+          <span class="text-gray-600">|</span>
+          <span>Open Quantum Science</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- ADMIN CONTROL DRAWER / MODAL                            -->
+  <!-- ======================================================== -->
+  <div id="adminOverlay" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end">
+    <div id="adminDrawer" class="w-full max-w-2xl bg-void-950 border-l border-cyan-500/30 h-full p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-violet-500/20 border border-violet-400/40 flex items-center justify-center text-quantum-cyan">
+            <i class="ph-bold ph-sliders text-base"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-white font-mono">Admin Control Center</h2>
+            <p class="text-[10px] text-gray-400 font-mono">Manage team, supervisor, projects &amp; data</p>
+          </div>
+        </div>
+        <button onclick="toggleAdminPanel()" class="text-gray-400 hover:text-white text-xl p-1">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex gap-2 border-b border-white/10 py-3 overflow-x-auto text-xs font-mono shrink-0">
+        <button onclick="switchAdminTab('tab-supervisor')" id="btn-tab-supervisor" class="admin-tab-btn active px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-300 font-bold">Supervisor</button>
+        <button onclick="switchAdminTab('tab-team')" id="btn-tab-team" class="admin-tab-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">Team Members</button>
+        <button onclick="switchAdminTab('tab-projects')" id="btn-tab-projects" class="admin-tab-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">Projects</button>
+        <button onclick="switchAdminTab('tab-pubs')" id="btn-tab-pubs" class="admin-tab-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">Papers</button>
+        <button onclick="switchAdminTab('tab-settings')" id="btn-tab-settings" class="admin-tab-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">Telemetry &amp; Backup</button>
+      </div>
+
+      <!-- Tab 1: Supervisor -->
+      <div id="tab-supervisor" class="admin-tab-content py-4 space-y-4 text-xs font-mono">
+        <h3 class="text-sm font-bold text-cyan-300 mb-2">Principal Investigator / Supervisor Details</h3>
+        <div>
+          <label class="block text-gray-400 mb-1">Full Name &amp; Title</label>
+          <input type="text" id="adminSupName" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Designation</label>
+            <input type="text" id="adminSupRole" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Academic Credentials</label>
+            <input type="text" id="adminSupCreds" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">Bio / Vision Statement</label>
+          <textarea id="adminSupBio" rows="4" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono"></textarea>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">Supervisory Tracks (Comma Separated)</label>
+          <input type="text" id="adminSupTracks" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" placeholder="AFC Memories, CV-QKD, Simulator Engine" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">PGP Key Fingerprint</label>
+            <input type="text" id="adminSupPgp" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Email Address</label>
+            <input type="text" id="adminSupEmail" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+          </div>
+        </div>
+        <button onclick="saveSupervisorForm()" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase transition-all shadow-glow-cyan">
+          Save Supervisor Profile
+        </button>
+      </div>
+
+      <!-- Tab 2: Team Members -->
+      <div id="tab-team" class="admin-tab-content hidden py-4 space-y-4 text-xs font-mono">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-cyan-300">Lab Team Members</h3>
+          <button onclick="openAddMemberModal()" class="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 flex items-center gap-1">
+            <i class="ph-bold ph-plus"></i> Add New Member
+          </button>
+        </div>
+
+        <div id="adminMembersList" class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Tab 3: Projects -->
+      <div id="tab-projects" class="admin-tab-content hidden py-4 space-y-4 text-xs font-mono">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-cyan-300">Research Projects</h3>
+          <button onclick="openAddProjectModal()" class="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 flex items-center gap-1">
+            <i class="ph-bold ph-plus"></i> Add Project
+          </button>
+        </div>
+
+        <div id="adminProjectsList" class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Tab 4: Publications -->
+      <div id="tab-pubs" class="admin-tab-content hidden py-4 space-y-4 text-xs font-mono">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-cyan-300">Publications</h3>
+          <button onclick="openAddPublicationModal()" class="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 flex items-center gap-1">
+            <i class="ph-bold ph-plus"></i> Add Paper
+          </button>
+        </div>
+
+        <div id="adminPubsList" class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Tab 5: Telemetry & Backup -->
+      <div id="tab-settings" class="admin-tab-content hidden py-4 space-y-5 text-xs font-mono">
+        <div>
+          <h3 class="text-sm font-bold text-cyan-300 mb-2">Live Hero Telemetry Counters</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Active Qubit Nodes</label>
+              <input type="text" id="adminTelNodes" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Bell Pair Fidelity</label>
+              <input type="text" id="adminTelFid" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Group Publications Count</label>
+              <input type="text" id="adminTelPubs" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Lab Researchers Count</label>
+              <input type="text" id="adminTelTeam" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+          </div>
+          <button onclick="saveTelemetryForm()" class="mt-3 w-full py-2 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 hover:bg-sky-500/30 font-bold">
+            Update Telemetry Counters
+          </button>
+        </div>
+
+        <div class="pt-4 border-t border-white/10">
+          <h3 class="text-sm font-bold text-cyan-300 mb-2">Lab Contact Coordinates</h3>
+          <div class="space-y-2.5">
+            <div>
+              <label class="block text-gray-400 mb-1">HQ Address</label>
+              <input type="text" id="adminContactHq" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Official Inquiry Email</label>
+              <input type="text" id="adminContactEmail" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">GitHub / Simulator URL</label>
+              <input type="text" id="adminContactRepo" class="w-full bg-void-900 border border-white/15 rounded-lg p-2 text-white font-mono" />
+            </div>
+          </div>
+          <button onclick="saveContactForm()" class="mt-3 w-full py-2 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 hover:bg-sky-500/30 font-bold">
+            Update Lab Contact Details
+          </button>
+        </div>
+
+        <div class="pt-4 border-t border-white/10 space-y-3">
+          <h3 class="text-sm font-bold text-violet-300">Data Persistence &amp; Backup</h3>
+          <p class="text-gray-400 text-[11px]">Export all your customized members, projects, and supervisor data as a JSON file to save or commit into code.</p>
+          <div class="flex gap-2">
+            <button onclick="exportDataJson()" class="flex-1 py-2 rounded-xl bg-cyan-400/20 hover:bg-cyan-400/30 border border-cyan-400/40 text-cyan-300 font-bold flex items-center justify-center gap-1.5">
+              <i class="ph-bold ph-download-simple"></i>
+              <span>Export JSON</span>
+            </button>
+            <button onclick="document.getElementById('importFileInput').click()" class="flex-1 py-2 rounded-xl bg-sky-400/20 hover:bg-sky-400/30 border border-sky-400/40 text-sky-300 font-bold flex items-center justify-center gap-1.5">
+              <i class="ph-bold ph-upload-simple"></i>
+              <span>Import JSON</span>
+            </button>
+            <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importDataJson(event)">
+          </div>
+          <button onclick="resetDataToDefault()" class="w-full py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold flex items-center justify-center gap-1.5">
+            <i class="ph-bold ph-arrow-counter-clockwise"></i>
+            <span>Reset All to Lab Defaults</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Dynamic Detail Modal (For Member/Project Dossiers or Add/Edit forms) -->
+  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="modalBox" class="glass-card w-full max-w-2xl rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 relative border border-cyan-500/30 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal()" aria-label="Close modal" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center text-lg transition-colors">
+        <i class="ph-bold ph-x"></i>
+      </button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 glass-card border border-cyan-400/60 px-4 py-3 rounded-xl text-xs font-mono text-cyan-300 shadow-glow-cyan flex items-center gap-2.5 pointer-events-none">
+    <i class="ph-fill ph-check-circle text-base text-emerald-400"></i>
+    <span id="toastMsg">Operation successful!</span>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: LOGIC, STORE, DOM SYNCHRONIZER & SIMULATOR   -->
+  <!-- ======================================================== -->
+  <script>
+    // ========================================================
+    // 1. HawkEye Quantum Startup Telemetry Sequence
+    // ========================================================
+    const telemetrySteps = [
+      { text: "[01] INITIALIZING CRYOGENIC OPTICAL CAVITY (12 mK)...", progress: "18%", theta: "15.0°", phi: "30.0°", fidelity: "0.8920", visibility: "84.2%" },
+      { text: "[02] TUNING INTERFEROMETER TO HOMODYNE RESONANCE...", progress: "36%", theta: "28.5°", phi: "65.2°", fidelity: "0.9315", visibility: "91.8%" },
+      { text: "[03] PREPARING MAXIMALLY ENTANGLED BELL PAIR |Φ⁺⟩...", progress: "54%", theta: "45.0°", phi: "90.0°", fidelity: "0.9740", visibility: "95.5%" },
+      { text: "[04] DETECTING PHOTON COINCIDENCES (CARRIER: 1550 nm)...", progress: "72%", theta: "45.0°", phi: "90.0°", fidelity: "0.9880", visibility: "97.4%" },
+      { text: "[05] EXECUTING BELL STATE MEASUREMENT (BSM)...", progress: "90%", theta: "45.0°", phi: "90.0°", fidelity: "0.9942", visibility: "98.2%" },
+      { text: "[06] HAWKEYE QUANTUM LOCK CONFIRMED // STATE COLLAPSED", progress: "100%", theta: "45.0°", phi: "90.0°", fidelity: "0.9985", visibility: "99.1%" }
+    ];
+
+    let currentStepIndex = 0;
+    let telemetryInterval = null;
+
+    function runHawkEyeTelemetry() {
+      currentStepIndex = 0;
+      updateStepDisplay(0);
+
+      if (telemetryInterval) clearInterval(telemetryInterval);
+
+      telemetryInterval = setInterval(() => {
+        currentStepIndex++;
+        if (currentStepIndex < telemetrySteps.length) {
+          updateStepDisplay(currentStepIndex);
+        } else {
+          clearInterval(telemetryInterval);
+          triggerStateCollapse();
+        }
+      }, 700);
+    }
+
+    function updateStepDisplay(idx) {
+      const step = telemetrySteps[idx];
+      const logEl = document.getElementById('liveTelemetryLog');
+      const progEl = document.getElementById('splashProgress');
+      const counterEl = document.getElementById('stepCounter');
+      const anglesEl = document.getElementById('polarAnglesDisplay');
+      const fidEl = document.getElementById('telemetryFidelity');
+      const visEl = document.getElementById('telemetryVisibility');
+      const lockStatus = document.getElementById('homodyneLockStatus');
+
+      if (logEl) logEl.innerText = step.text;
+      if (progEl) progEl.style.width = step.progress;
+      if (counterEl) counterEl.innerText = `PHASE ${idx + 1} / 6`;
+      if (anglesEl) anglesEl.innerText = `θ: ${step.theta} • φ: ${step.phi}`;
+      if (fidEl) fidEl.innerText = step.fidelity;
+      if (visEl) visEl.innerText = `V = ${step.visibility}`;
+
+      if (idx === telemetrySteps.length - 1) {
+        lockStatus.innerText = "LOCKED";
+        lockStatus.className = "text-emerald-400 font-bold";
+      } else {
+        lockStatus.innerText = "STABILIZING";
+        lockStatus.className = "text-quantum-cyan font-bold";
+      }
+    }
+
+    function triggerStateCollapse() {
+      const flash = document.getElementById('quantumCollapseFlash');
+      const windowEl = document.getElementById('hawkeyeWindow');
+      
+      if (flash) flash.style.opacity = '0.9';
+      if (windowEl) windowEl.style.transform = 'scale(1.04)';
+
+      setTimeout(() => {
+        if (flash) flash.style.opacity = '0';
+        setTimeout(() => {
+          dismissHawkEyeSplash();
+        }, 350);
+      }, 400);
+    }
+
+    function dismissHawkEyeSplash() {
+      const splash = document.getElementById('hawkeyeSplash');
+      if (splash) {
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => {
+          splash.classList.add('hidden');
+        }, 700);
+      }
+      showToast("HawkEye QNeCT Testbed Loaded & Locked");
+    }
+
+    function triggerHawkEyeSplash() {
+      const splash = document.getElementById('hawkeyeSplash');
+      const windowEl = document.getElementById('hawkeyeWindow');
+      if (splash) {
+        splash.classList.remove('hidden');
+        void splash.offsetWidth;
+        splash.style.opacity = '1';
+        splash.style.pointerEvents = 'auto';
+        if (windowEl) windowEl.style.transform = 'scale(1)';
+        runHawkEyeTelemetry();
+      }
+    }
+
+    // ========================================================
+    // 2. Data Store & Dynamic Admin System
+    // ========================================================
+    const DEFAULT_STORE = {
+      supervisor: {
+        name: "Prof. Dr. Arindam Sengupta",
+        role: "Group Director & Principal Investigator",
+        credentials: "Ph.D. Quantum Information (Max Planck / IISc Alum) • Senior IEEE Member",
+        bio: "Prof. Sengupta founded HawkEye QNeCT to advance both foundational quantum physics and scalable telecommunication engineering. His research concentrates on quantum repeater memories, continuous-variable Bell swapping, daylight free-space quantum channels, and directing the development of the in-house QNeCT network simulator.",
+        tracks: ["Atomic Frequency Comb (AFC) Memories", "Continuous-Variable QKD Systems", "QNeCT Discrete-Event Simulator Engine", "Satellite Ground Terminals"],
+        pgp: "4A89 F0E2 88C1 3349 90BD 7721 EA02 4410 F302 91A2",
+        email: "arindam.sengupta@hawkeye-qnect.org",
+        scholar: "https://scholar.google.com",
+        github: "https://github.com",
+        linkedin: "https://linkedin.com"
+      },
+      telemetry: {
+        activeNodes: "18",
+        activeNodesSub: "Fiber testbeds & cryo nodes",
+        bellFidelity: "98.8",
+        bellFidelitySub: "Swapping over 80 km spools",
+        pubCount: "34",
+        pubCountSub: "PRL, npj Quantum, IEEE",
+        teamCount: "14",
+        teamCountSub: "PI, Postdocs, PhDs, Engineers"
+      },
+      contact: {
+        hq: "HawkEye QNeCT Laboratory • Centre for Quantum Science & Optics",
+        email: "coordinator@hawkeye-qnect.org",
+        repo: "github.com/hawkeye-qnect/qnect-toolbox"
+      },
+      team: [
+        {
+          id: "t1",
+          name: "Dr. Niharika Rao",
+          initials: "DR. N. RAO",
+          role: "Postdoctoral Fellow",
+          category: "postdoc",
+          topic: "Quantum Repeater Nodes",
+          description: "Cold Rubidium vapor cell memories, telecom C-band conversion, and DLCZ protocol entanglement purification.",
+          email: "niharika@hawkeye-qnect.org",
+          icon: "ph-atom",
+          color: "cyan"
+        },
+        {
+          id: "t2",
+          name: "Vikramaditya Sharma",
+          initials: "V. SHARMA",
+          role: "Senior PhD Scholar",
+          category: "phd",
+          topic: "Free-Space & Satellite QKD",
+          description: "Atmospheric turbulence adaptive optics and daylight BB84 photon transmission across 3.2 km urban links.",
+          email: "vikram@hawkeye-qnect.org",
+          icon: "ph-satellite",
+          color: "sky"
+        },
+        {
+          id: "t3",
+          name: "Ananya Roy",
+          initials: "ANANYA ROY",
+          role: "Doctoral Scholar",
+          category: "phd",
+          topic: "Routing & QNeCT NetStack",
+          description: "Autonomous Bell state distribution schedules, multi-hop fidelity preservation, and classical quantum-header routing.",
+          email: "ananya@hawkeye-qnect.org",
+          icon: "ph-git-merge",
+          color: "violet"
+        },
+        {
+          id: "t4",
+          name: "Kartik Venkatraman",
+          initials: "K. VENKAT",
+          role: "Hardware Engineer",
+          category: "engineer",
+          topic: "Cryogenic SNSPD Systems",
+          description: "Sub-15 picosecond time-tagging instrumentation, dark count filtration, and superconducting detector calibration.",
+          email: "kartik@hawkeye-qnect.org",
+          icon: "ph-thermometer-cold",
+          color: "emerald"
+        },
+        {
+          id: "t5",
+          name: "Sneha Balasubramanian",
+          initials: "S. BALA",
+          role: "Junior Research Fellow",
+          category: "jrf",
+          topic: "Continuous-Variable Protocols",
+          description: "Lattice security integration, privacy amplification algorithms, and continuous-variable homodyne detection modeling.",
+          email: "sneha@hawkeye-qnect.org",
+          icon: "ph-lock-key",
+          color: "cyan"
+        },
+        {
+          id: "t6",
+          name: "Tariq Farooq",
+          initials: "T. FAROOQ",
+          role: "Doctoral Scholar",
+          category: "phd",
+          topic: "Diamond NV Center Cavities",
+          description: "Spin-photon coherent state interfaces for deterministic quantum key memory buffers and photonic quantum switches.",
+          email: "tariq@hawkeye-qnect.org",
+          icon: "ph-diamonds-four",
+          color: "sky"
+        },
+        {
+          id: "t7",
+          name: "Dr. Preeti Menon",
+          initials: "DR. P. MENON",
+          role: "Postdoctoral Fellow",
+          category: "postdoc",
+          topic: "DI-QKD & Bell Verification",
+          description: "Loophole-free Bell test demonstrations and device-independent security proofs against uncharacterized hardware.",
+          email: "preeti@hawkeye-qnect.org",
+          icon: "ph-chart-polar",
+          color: "violet"
+        },
+        {
+          id: "t8",
+          name: "Devendra Patel",
+          initials: "D. PATEL",
+          role: "QNeCT Engine Architect",
+          category: "engineer",
+          topic: "QNeCT Simulator Core",
+          description: "Core developer of the QNeCT discrete-event simulation engine, C++ Lindblad noise operators, and Python API bindings.",
+          email: "devendra@hawkeye-qnect.org",
+          icon: "ph-terminal-window",
+          color: "emerald"
+        }
+      ],
+      projects: [
+        {
+          id: "p1",
+          acronym: "Q-REP",
+          name: "Telecom C-Band Quantum Repeater Node",
+          tag: "Hardware Testbed",
+          status: "Phase II Live",
+          color: "cyan",
+          summary: "Inter-city quantum repeater prototype utilizing cold 87Rb atomic vapor memory cells with optical frequency conversion to 1552 nm. Realizes 25 ms coherence with non-destructive verification.",
+          param1: "Memory Storage Time: 25.4 ms (Rubidium MOT)",
+          param2: "Swapping Probability: > 42.6% per attempt",
+          footerInfo: "Lab Spool: 80 km fiber"
+        },
+        {
+          id: "p2",
+          acronym: "AeroQKD",
+          name: "Daylight Urban Free-Space Link",
+          tag: "Free-Space & Optics",
+          status: "Field Validated",
+          color: "sky",
+          summary: "Autonomous adaptive optics and tip-tilt tracking system neutralizing atmospheric thermal turbulence for high-key-rate decoy-state BB84 protocols over urban distances.",
+          param1: "Link Distance: 3.2 km Line-of-Sight",
+          param2: "Daylight Filtering: 10 picometer narrow-band filter",
+          footerInfo: "Optical Ground Station (OGS-1)"
+        },
+        {
+          id: "p3",
+          acronym: "QNeCT Core",
+          name: "Discrete-Event Quantum Simulator",
+          tag: "Toolbox Backend",
+          status: "v2.4 Released",
+          color: "emerald",
+          summary: "The group's in-house C++/Python simulation package modeled with empirical fiber attenuation curves, polarization mode dispersion, detector jitter, and multi-repeater swapping logic.",
+          param1: "Engine Backend: C++20 Core • Python Bindings",
+          param2: "Scalability: > 300 Entangled Nodes Sim",
+          footerInfo: "pip install qnect-toolbox"
+        },
+        {
+          id: "p4",
+          acronym: "NV-Node",
+          name: "Integrated Diamond Spin Microchip",
+          tag: "Solid-State Physics",
+          status: "Prototyping",
+          color: "violet",
+          summary: "Nanophotonic diamond optical microcavities coupled with negatively charged NV color centers for deterministic stationary memory registers in distributed quantum internet routing.",
+          param1: "Cavity Q-Factor: > 38,000",
+          param2: "Purcell Enhancement: 22.4x",
+          footerInfo: "Superconducting Cryo Platform"
+        }
+      ],
+      publications: [
+        {
+          id: "pub1",
+          tag: "Phys. Rev. Lett. 2025",
+          doi: "DOI: 10.1103/PhysRevLett.134.120501",
+          title: "Deterministic Entanglement Swapping Across a 60-km Deployed Field Optical Fiber Network",
+          authors: "A. Sengupta, N. Rao, V. Sharma, K. Venkatraman, et al.",
+          bibtexKey: "sengupta2025deterministic"
+        },
+        {
+          id: "pub2",
+          tag: "npj Quantum Information 2024",
+          doi: "DOI: 10.1038/s41534-024-00891-w",
+          title: "Robust Adaptive Optics Wavefront Sensing for Satellite-to-Ground Daylight Continuous-Variable QKD",
+          authors: "V. Sharma, P. Menon, A. Sengupta",
+          bibtexKey: "sharma2024robust"
+        },
+        {
+          id: "pub3",
+          tag: "IEEE JSAC 2024",
+          doi: "DOI: 10.1109/JSAC.2024.3391024",
+          title: "Distributed Bell Pair Generation and Routing in Arbitrary Quantum Topologies via QNeCT",
+          authors: "A. Roy, D. Patel, P. Menon, A. Sengupta",
+          bibtexKey: "roy2024distributed"
+        }
+      ]
+    };
+
+    // Load from localStorage or initialize
+    let labStore = {};
+    try {
+      const cached = localStorage.getItem('hawkeye_qnect_store_v1');
+      if (cached) {
+        labStore = JSON.parse(cached);
+      } else {
+        labStore = JSON.parse(JSON.stringify(DEFAULT_STORE));
+        localStorage.setItem('hawkeye_qnect_store_v1', JSON.stringify(labStore));
+      }
+    } catch(e) {
+      labStore = JSON.parse(JSON.stringify(DEFAULT_STORE));
+    }
+
+    function saveStore() {
+      try {
+        localStorage.setItem('hawkeye_qnect_store_v1', JSON.stringify(labStore));
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+      renderAll();
+    }
+
+    // ========================================================
+    // 3. Dynamic Rendering Functions
+    // ========================================================
+    function renderHeroTelemetry() {
+      const container = document.getElementById('heroTelemetryContainer');
+      if (!container) return;
+      const t = labStore.telemetry;
+      container.innerHTML = `
+        <div class="glass-card p-5 rounded-2xl text-left">
+          <div class="flex items-center justify-between text-gray-400 mb-1">
+            <span class="text-[11px] font-mono uppercase tracking-wider">Active Qubit Nodes</span>
+            <i class="ph-bold ph-broadcast text-cyan-400"></i>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">${t.activeNodes} <span class="text-xs text-quantum-cyan font-sans font-normal">Online</span></div>
+          <p class="text-[11px] text-gray-400 mt-1">${t.activeNodesSub}</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl text-left">
+          <div class="flex items-center justify-between text-gray-400 mb-1">
+            <span class="text-[11px] font-mono uppercase tracking-wider">Bell Pair Fidelity</span>
+            <i class="ph-bold ph-chart-polar text-sky-400"></i>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">${t.bellFidelity}<span class="text-sm text-cyan-400 font-sans">%</span></div>
+          <p class="text-[11px] text-gray-400 mt-1">${t.bellFidelitySub}</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl text-left">
+          <div class="flex items-center justify-between text-gray-400 mb-1">
+            <span class="text-[11px] font-mono uppercase tracking-wider">Group Publications</span>
+            <i class="ph-bold ph-book-open text-violet-400"></i>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">${t.pubCount}<span class="text-sm font-sans text-violet-300">+</span></div>
+          <p class="text-[11px] text-gray-400 mt-1">${t.pubCountSub}</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl text-left">
+          <div class="flex items-center justify-between text-gray-400 mb-1">
+            <span class="text-[11px] font-mono uppercase tracking-wider">Lab Researchers</span>
+            <i class="ph-bold ph-users text-emerald-400"></i>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">${t.teamCount} <span class="text-xs text-emerald-400 font-sans">Scholars</span></div>
+          <p class="text-[11px] text-gray-400 mt-1">${t.teamCountSub}</p>
+        </div>
+      `;
+    }
+
+    function renderSupervisor() {
+      const s = labStore.supervisor;
+      const container = document.getElementById('supervisorContainer');
+      if (!container) return;
+
+      const tracksHtml = s.tracks.map(tr => 
+        `<span class="px-3 py-1 rounded-lg bg-void-900 border border-cyan-500/30 text-xs font-mono text-cyan-300">${tr}</span>`
+      ).join('');
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-4 flex flex-col items-center text-center">
+            <div class="relative group">
+              <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border-2 border-cyan-400/50 p-2 bg-void-900 shadow-glow-cyan flex items-center justify-center">
+                <div class="w-full h-full rounded-xl bg-void-950 flex flex-col items-center justify-center relative p-6">
+                  <i class="ph-bold ph-user-circle-gear text-7xl text-quantum-cyan"></i>
+                  <span class="mt-3 font-mono font-bold text-sm text-white">${s.name.toUpperCase()}</span>
+                  <span class="text-[10px] font-mono text-cyan-400 tracking-wider">PI &bull; HAWKEYE QNeCT</span>
+                </div>
+              </div>
+              <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-void-950 border border-cyan-400/60 rounded-full text-[10px] font-mono text-cyan-300 whitespace-nowrap shadow-lg flex items-center gap-1.5">
+                <i class="ph-fill ph-check-circle text-emerald-400"></i> Principal Investigator
+              </div>
+            </div>
+
+            <div class="mt-6 w-full max-w-xs">
+              <button onclick="copyPgpFingerprint()" class="w-full px-3 py-2 rounded-xl bg-void-950 hover:bg-void-900 border border-white/10 text-gray-300 hover:text-cyan-300 text-[11px] font-mono flex items-center justify-center gap-1.5 transition-all">
+                <i class="ph-bold ph-key"></i>
+                <span class="truncate">PGP: ${s.pgp.substring(0, 19)}...</span>
+              </button>
+            </div>
+
+            <div class="mt-4 flex gap-3 text-lg">
+              <a href="${s.scholar}" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-400 text-gray-300 hover:text-quantum-cyan flex items-center justify-center transition-all">
+                <i class="ph-bold ph-graduation-cap"></i>
+              </a>
+              <a href="${s.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-400 text-gray-300 hover:text-quantum-cyan flex items-center justify-center transition-all">
+                <i class="ph-bold ph-linkedin-logo"></i>
+              </a>
+              <a href="${s.github}" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-400 text-gray-300 hover:text-quantum-cyan flex items-center justify-center transition-all">
+                <i class="ph-bold ph-github-logo"></i>
+              </a>
+              <a href="mailto:${s.email}" aria-label="Direct Email" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-400 text-gray-300 hover:text-quantum-cyan flex items-center justify-center transition-all">
+                <i class="ph-bold ph-envelope"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="lg:col-span-8 text-left">
+            <div class="inline-block text-xs font-mono uppercase text-quantum-cyan tracking-wider font-bold mb-1">
+              ${s.role}
+            </div>
+            <h3 class="text-3xl sm:text-4xl font-extrabold text-white font-display">${s.name}</h3>
+            <p class="text-xs font-mono text-gray-400 mt-1">${s.credentials}</p>
+
+            <p class="mt-5 text-gray-300 leading-relaxed text-sm sm:text-base">
+              ${s.bio}
+            </p>
+
+            <div class="mt-6">
+              <h4 class="text-xs font-mono uppercase text-gray-400 tracking-wider mb-2.5">Supervisory Tracks</h4>
+              <div class="flex flex-wrap gap-2">
+                ${tracksHtml}
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-4">
+              <button onclick="openModal('supervisor-detail')" class="px-5 py-2.5 rounded-xl text-xs font-mono font-semibold uppercase tracking-wider bg-white/10 hover:bg-white/15 border border-white/20 text-white transition-all flex items-center gap-2">
+                <span>View Academic Dossier</span>
+                <i class="ph-bold ph-arrow-up-right text-xs"></i>
+              </button>
+              <button onclick="openEditSupervisorModal()" class="px-3.5 py-2 rounded-xl text-xs font-mono text-violet-300 bg-violet-500/15 border border-violet-400/30 hover:bg-violet-500/25 flex items-center gap-1.5 transition-all">
+                <i class="ph-bold ph-pencil-simple"></i>
+                <span>Edit Supervisor</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTeam() {
+      const grid = document.getElementById('teamGrid');
+      if (!grid) return;
+
+      grid.innerHTML = labStore.team.map(m => {
+        const borderClass = m.color === 'cyan' ? 'border-cyan-500/20' : m.color === 'sky' ? 'border-sky-500/20' : m.color === 'violet' ? 'border-violet-500/20' : 'border-emerald-500/20';
+        const textClass = m.color === 'cyan' ? 'text-cyan-400' : m.color === 'sky' ? 'text-sky-400' : m.color === 'violet' ? 'text-violet-400' : 'text-emerald-400';
+        const badgeClass = m.color === 'cyan' ? 'border-cyan-400/30 text-cyan-300' : m.color === 'sky' ? 'border-sky-400/30 text-sky-300' : m.color === 'violet' ? 'border-violet-400/30 text-violet-300' : 'border-emerald-400/30 text-emerald-300';
+
+        return `
+          <div class="team-card glass-card rounded-2xl p-5 flex flex-col justify-between relative group" data-category="${m.category}" data-id="${m.id}">
+            <div>
+              <div class="relative w-full aspect-square rounded-xl overflow-hidden mb-4 bg-void-950 border border-white/10 flex items-center justify-center p-4">
+                <div class="w-full h-full rounded-lg bg-void-900 ${borderClass} flex flex-col items-center justify-center text-center p-3">
+                  <i class="ph-bold ${m.icon || 'ph-user'} text-5xl ${textClass}"></i>
+                  <span class="mt-2 text-xs font-bold font-mono text-white">${m.initials}</span>
+                  <span class="text-[10px] text-gray-400 font-mono">${m.topic}</span>
+                </div>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-void-950/90 ${badgeClass} text-[10px] font-mono border">${m.role}</span>
+              </div>
+              <h3 class="text-base font-bold text-white leading-tight">${m.name}</h3>
+              <p class="text-xs font-mono ${textClass} mt-0.5">${m.topic}</p>
+              <p class="text-xs text-gray-400 mt-2.5 line-clamp-3">${m.description}</p>
+            </div>
+            
+            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+              <button onclick="openMemberDossier('${m.id}')" class="text-xs font-mono font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                <span>View Dossier</span>
+                <i class="ph-bold ph-arrow-right"></i>
+              </button>
+              <div class="flex items-center gap-2 text-gray-400">
+                <button onclick="openEditMemberModal('${m.id}')" class="hover:text-cyan-300" title="Edit Member"><i class="ph-bold ph-pencil"></i></button>
+                <button onclick="deleteMember('${m.id}')" class="hover:text-rose-400" title="Delete Member"><i class="ph-bold ph-trash"></i></button>
+                <a href="mailto:${m.email}" class="hover:text-cyan-400"><i class="ph-bold ph-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderProjects() {
+      const grid = document.getElementById('projectsGrid');
+      const badge = document.getElementById('projectCountBadge');
+      if (!grid) return;
+
+      if (badge) {
+        badge.innerHTML = `<i class="ph-fill ph-check-circle text-emerald-400"></i> ${labStore.projects.length} Programs Fully Active`;
+      }
+
+      grid.innerHTML = labStore.projects.map(p => {
+        const topBorder = p.color === 'cyan' ? 'border-t-cyan-400' : p.color === 'sky' ? 'border-t-sky-400' : p.color === 'emerald' ? 'border-t-emerald-400' : 'border-t-violet-400';
+        const tagBadge = p.color === 'cyan' ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' : p.color === 'sky' ? 'bg-sky-500/15 text-sky-300 border-sky-500/30' : p.color === 'emerald' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-violet-500/15 text-violet-300 border-violet-500/30';
+
+        return `
+          <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between border-t-2 ${topBorder} relative group" data-project-id="${p.id}">
+            <div>
+              <div class="flex items-center justify-between gap-4 mb-3">
+                <span class="text-[11px] font-mono uppercase px-2.5 py-1 rounded border ${tagBadge}">${p.tag}</span>
+                <span class="text-xs font-mono text-emerald-400 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ${p.status}
+                </span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 font-display">${p.acronym}: ${p.name}</h3>
+              <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${p.summary}</p>
+
+              <div class="mt-5 p-3.5 rounded-xl bg-void-950 border border-white/10 font-mono text-xs space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Parameter A:</span>
+                  <span class="text-cyan-300">${p.param1}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Parameter B:</span>
+                  <span class="text-emerald-400">${p.param2}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+              <span class="text-gray-400">${p.footerInfo}</span>
+              <div class="flex items-center gap-3">
+                <button onclick="openEditProjectModal('${p.id}')" class="text-gray-400 hover:text-cyan-300"><i class="ph-bold ph-pencil"></i> Edit</button>
+                <button onclick="deleteProject('${p.id}')" class="text-gray-400 hover:text-rose-400"><i class="ph-bold ph-trash"></i></button>
+                <button onclick="openProjectDossier('${p.id}')" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                  <span>Blueprint</span>
+                  <i class="ph-bold ph-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPublications() {
+      const list = document.getElementById('publicationsList');
+      if (!list) return;
+
+      list.innerHTML = labStore.publications.map(pub => {
+        return `
+          <div class="glass-card p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative group" data-pub-id="${pub.id}">
+            <div class="max-w-3xl">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${pub.tag}</span>
+                <span class="text-gray-500 text-xs font-mono">&bull; ${pub.doi}</span>
+              </div>
+              <h3 class="text-base sm:text-lg font-bold text-white hover:text-quantum-cyan transition-colors">
+                ${pub.title}
+              </h3>
+              <p class="text-xs font-mono text-gray-400 mt-1">${pub.authors}</p>
+            </div>
+            <div class="flex items-center gap-2.5 self-start md:self-center shrink-0">
+              <button onclick="copyBibtex('${pub.bibtexKey}')" class="px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-mono text-cyan-300 border border-white/10 flex items-center gap-1.5 transition-all">
+                <i class="ph-bold ph-quotes"></i>
+                <span>Copy BibTeX</span>
+              </button>
+              <button onclick="openEditPublicationModal('${pub.id}')" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-cyan-300 border border-white/10 text-xs">
+                <i class="ph-bold ph-pencil"></i>
+              </button>
+              <button onclick="deletePublication('${pub.id}')" class="p-2 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-300 hover:text-rose-400 border border-white/10 text-xs">
+                <i class="ph-bold ph-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderContact() {
+      const c = labStore.contact;
+      const container = document.getElementById('contactInfoContainer');
+      if (!container) return;
+
+      container.innerHTML = `
+        <span class="text-xs font-mono font-semibold uppercase tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3 inline-block">Transmission Gateway</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight font-display">Connect With HawkEye QNeCT</h2>
+        <p class="text-gray-400 text-sm mt-3 leading-relaxed font-mono">
+          Inquiries regarding doctoral positions, postdoc fellowships, simulator integration, and collaborative experimental testbeds are directly delivered to the lab coordinator.
+        </p>
+
+        <div class="mt-8 space-y-4 font-mono text-xs">
+          <div class="p-4 rounded-xl bg-void-950 border border-white/10 flex items-start gap-3">
+            <i class="ph-bold ph-buildings text-cyan-400 text-lg shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-white font-bold">Research Headquarters</div>
+              <div class="text-gray-400 mt-0.5">${c.hq}</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-void-950 border border-white/10 flex items-start gap-3">
+            <i class="ph-bold ph-envelope text-sky-400 text-lg shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-white font-bold">Official Inquiries</div>
+              <a href="mailto:${c.email}" class="text-cyan-400 hover:underline">${c.email}</a>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-void-950 border border-white/10 flex items-start gap-3">
+            <i class="ph-bold ph-terminal text-emerald-400 text-lg shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-white font-bold">QNeCT Repository</div>
+              <div class="text-gray-400 mt-0.5">${c.repo}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminDashboard() {
+      // Supervisor Inputs
+      const s = labStore.supervisor;
+      document.getElementById('adminSupName').value = s.name;
+      document.getElementById('adminSupRole').value = s.role;
+      document.getElementById('adminSupCreds').value = s.credentials;
+      document.getElementById('adminSupBio').value = s.bio;
+      document.getElementById('adminSupTracks').value = s.tracks.join(', ');
+      document.getElementById('adminSupPgp').value = s.pgp;
+      document.getElementById('adminSupEmail').value = s.email;
+
+      // Telemetry Inputs
+      const t = labStore.telemetry;
+      document.getElementById('adminTelNodes').value = t.activeNodes;
+      document.getElementById('adminTelFid').value = t.bellFidelity;
+      document.getElementById('adminTelPubs').value = t.pubCount;
+      document.getElementById('adminTelTeam').value = t.teamCount;
+
+      // Contact Inputs
+      const c = labStore.contact;
+      document.getElementById('adminContactHq').value = c.hq;
+      document.getElementById('adminContactEmail').value = c.email;
+      document.getElementById('adminContactRepo').value = c.repo;
+
+      // Admin Members List
+      const memList = document.getElementById('adminMembersList');
+      memList.innerHTML = labStore.team.map(m => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-void-900 border border-white/10">
+          <div>
+            <div class="font-bold text-white">${m.name}</div>
+            <div class="text-[10px] text-gray-400">${m.role} &bull; ${m.topic}</div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openEditMemberModal('${m.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-cyan-300"><i class="ph-bold ph-pencil"></i></button>
+            <button onclick="deleteMember('${m.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-rose-500/20 text-rose-400"><i class="ph-bold ph-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      // Admin Projects List
+      const prjList = document.getElementById('adminProjectsList');
+      prjList.innerHTML = labStore.projects.map(p => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-void-900 border border-white/10">
+          <div>
+            <div class="font-bold text-white">${p.acronym}: ${p.name}</div>
+            <div class="text-[10px] text-gray-400">${p.tag} &bull; ${p.status}</div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openEditProjectModal('${p.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-cyan-300"><i class="ph-bold ph-pencil"></i></button>
+            <button onclick="deleteProject('${p.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-rose-500/20 text-rose-400"><i class="ph-bold ph-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      // Admin Publications List
+      const pbList = document.getElementById('adminPubsList');
+      pbList.innerHTML = labStore.publications.map(pub => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-void-900 border border-white/10">
+          <div class="truncate max-w-xs">
+            <div class="font-bold text-white truncate">${pub.title}</div>
+            <div class="text-[10px] text-gray-400">${pub.tag}</div>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button onclick="openEditPublicationModal('${pub.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-cyan-300"><i class="ph-bold ph-pencil"></i></button>
+            <button onclick="deletePublication('${pub.id}')" class="p-1.5 rounded-md bg-white/5 hover:bg-rose-500/20 text-rose-400"><i class="ph-bold ph-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAll() {
+      renderHeroTelemetry();
+      renderSupervisor();
+      renderTeam();
+      renderProjects();
+      renderPublications();
+      renderContact();
+      renderAdminDashboard();
+    }
+
+    // ========================================================
+    // 4. Admin CRUD Form Handlers
+    // ========================================================
+    function toggleAdminPanel() {
+      const overlay = document.getElementById('adminOverlay');
+      const drawer = document.getElementById('adminDrawer');
+      const isOpen = !overlay.classList.contains('pointer-events-none');
+
+      if (isOpen) {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      } else {
+        renderAdminDashboard();
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.admin-tab-btn').forEach(b => {
+        b.className = 'admin-tab-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white';
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById('btn-' + tabId).className = 'admin-tab-btn active px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-300 font-bold';
+    }
+
+    function saveSupervisorForm() {
+      labStore.supervisor.name = document.getElementById('adminSupName').value.trim();
+      labStore.supervisor.role = document.getElementById('adminSupRole').value.trim();
+      labStore.supervisor.credentials = document.getElementById('adminSupCreds').value.trim();
+      labStore.supervisor.bio = document.getElementById('adminSupBio').value.trim();
+      labStore.supervisor.tracks = document.getElementById('adminSupTracks').value.split(',').map(s => s.trim()).filter(Boolean);
+      labStore.supervisor.pgp = document.getElementById('adminSupPgp').value.trim();
+      labStore.supervisor.email = document.getElementById('adminSupEmail').value.trim();
+
+      saveStore();
+      showToast("Supervisor profile updated!");
+    }
+
+    function saveTelemetryForm() {
+      labStore.telemetry.activeNodes = document.getElementById('adminTelNodes').value.trim();
+      labStore.telemetry.bellFidelity = document.getElementById('adminTelFid').value.trim();
+      labStore.telemetry.pubCount = document.getElementById('adminTelPubs').value.trim();
+      labStore.telemetry.teamCount = document.getElementById('adminTelTeam').value.trim();
+
+      saveStore();
+      showToast("Lab telemetry counters updated!");
+    }
+
+    function saveContactForm() {
+      labStore.contact.hq = document.getElementById('adminContactHq').value.trim();
+      labStore.contact.email = document.getElementById('adminContactEmail').value.trim();
+      labStore.contact.repo = document.getElementById('adminContactRepo').value.trim();
+
+      saveStore();
+      showToast("Contact details saved!");
+    }
+
+    // Member Management
+    function openAddMemberModal() {
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Add New Research Member</h3>
+        <form onsubmit="handleAddMember(event)" class="space-y-3 font-mono text-xs">
+          <div>
+            <label class="block text-gray-400 mb-1">Full Name *</label>
+            <input type="text" id="newMemName" required placeholder="e.g. Dr. Ayesha Khan" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Role / Designation *</label>
+              <input type="text" id="newMemRole" required placeholder="PhD Scholar" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Category Filter *</label>
+              <select id="newMemCategory" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">
+                <option value="postdoc">Postdoctoral Fellow</option>
+                <option value="phd">PhD Scholar</option>
+                <option value="engineer">Research Engineer</option>
+                <option value="jrf">JRF Fellow</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Research Specialization Topic *</label>
+            <input type="text" id="newMemTopic" required placeholder="Quantum Memory Interfacing" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Short Description / Thesis Topic *</label>
+            <textarea id="newMemDesc" rows="3" required placeholder="Overview of research focus..." class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Email</label>
+              <input type="email" id="newMemEmail" placeholder="ayesha@hawkeye-qnect.org" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Color Theme</label>
+              <select id="newMemColor" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">
+                <option value="cyan">Quantum Cyan</option>
+                <option value="sky">Electric Sky</option>
+                <option value="violet">Ultraviolet</option>
+                <option value="emerald">Emerald</option>
+              </select>
+            </div>
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Member</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleAddMember(e) {
+      e.preventDefault();
+      const name = document.getElementById('newMemName').value.trim();
+      const role = document.getElementById('newMemRole').value.trim();
+      const category = document.getElementById('newMemCategory').value;
+      const topic = document.getElementById('newMemTopic').value.trim();
+      const description = document.getElementById('newMemDesc').value.trim();
+      const email = document.getElementById('newMemEmail').value.trim() || 'info@hawkeye-qnect.org';
+      const color = document.getElementById('newMemColor').value;
+
+      // Compute initials
+      const parts = name.split(' ');
+      const initials = parts.length > 1 ? `${parts[0][0]}. ${parts[parts.length - 1]}`.toUpperCase() : name.toUpperCase();
+
+      const newMember = {
+        id: 't_' + Date.now(),
+        name,
+        initials,
+        role,
+        category,
+        topic,
+        description,
+        email,
+        icon: 'ph-atom',
+        color
+      };
+
+      labStore.team.push(newMember);
+      saveStore();
+      closeModal();
+      showToast(`Added ${name} to research team!`);
+    }
+
+    function openEditMemberModal(id) {
+      const m = labStore.team.find(item => item.id === id);
+      if (!m) return;
+
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Edit Member: ${m.name}</h3>
+        <form onsubmit="handleSaveEditedMember(event, '${m.id}')" class="space-y-3 font-mono text-xs">
+          <div>
+            <label class="block text-gray-400 mb-1">Full Name</label>
+            <input type="text" id="editMemName" value="${m.name}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Role / Designation</label>
+              <input type="text" id="editMemRole" value="${m.role}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Category</label>
+              <select id="editMemCategory" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">
+                <option value="postdoc" ${m.category === 'postdoc' ? 'selected' : ''}>Postdoctoral Fellow</option>
+                <option value="phd" ${m.category === 'phd' ? 'selected' : ''}>PhD Scholar</option>
+                <option value="engineer" ${m.category === 'engineer' ? 'selected' : ''}>Research Engineer</option>
+                <option value="jrf" ${m.category === 'jrf' ? 'selected' : ''}>JRF Fellow</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Specialization Topic</label>
+            <input type="text" id="editMemTopic" value="${m.topic}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Description</label>
+            <textarea id="editMemDesc" rows="3" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">${m.description}</textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Email</label>
+              <input type="email" id="editMemEmail" value="${m.email}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Color Theme</label>
+              <select id="editMemColor" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">
+                <option value="cyan" ${m.color === 'cyan' ? 'selected' : ''}>Cyan</option>
+                <option value="sky" ${m.color === 'sky' ? 'selected' : ''}>Sky</option>
+                <option value="violet" ${m.color === 'violet' ? 'selected' : ''}>Violet</option>
+                <option value="emerald" ${m.color === 'emerald' ? 'selected' : ''}>Emerald</option>
+              </select>
+            </div>
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Changes</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleSaveEditedMember(e, id) {
+      e.preventDefault();
+      const m = labStore.team.find(item => item.id === id);
+      if (!m) return;
+
+      m.name = document.getElementById('editMemName').value.trim();
+      m.role = document.getElementById('editMemRole').value.trim();
+      m.category = document.getElementById('editMemCategory').value;
+      m.topic = document.getElementById('editMemTopic').value.trim();
+      m.description = document.getElementById('editMemDesc').value.trim();
+      m.email = document.getElementById('editMemEmail').value.trim();
+      m.color = document.getElementById('editMemColor').value;
+
+      saveStore();
+      closeModal();
+      showToast("Member updated successfully!");
+    }
+
+    function deleteMember(id) {
+      labStore.team = labStore.team.filter(m => m.id !== id);
+      saveStore();
+      showToast("Member removed.");
+    }
+
+    // Projects Management
+    function openAddProjectModal() {
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Add Research Project</h3>
+        <form onsubmit="handleAddProject(event)" class="space-y-3 font-mono text-xs">
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Acronym *</label>
+              <input type="text" id="newPrjAcr" required placeholder="Q-REP" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div class="col-span-2">
+              <label class="block text-gray-400 mb-1">Full Project Name *</label>
+              <input type="text" id="newPrjName" required placeholder="Quantum Repeater System" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Domain Tag</label>
+              <input type="text" id="newPrjTag" placeholder="Hardware Testbed" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Status Pill</label>
+              <input type="text" id="newPrjStatus" placeholder="Phase I Active" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Summary Overview *</label>
+            <textarea id="newPrjSummary" rows="3" required placeholder="Project mission and technical parameters..." class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Parameter 1</label>
+              <input type="text" id="newPrjP1" placeholder="Memory Storage Time: 25 ms" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Parameter 2</label>
+              <input type="text" id="newPrjP2" placeholder="Swapping Probability: 45%" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Footer / Link Note</label>
+            <input type="text" id="newPrjFoot" placeholder="Lab Spool: 80 km fiber" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Project</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleAddProject(e) {
+      e.preventDefault();
+      const newPrj = {
+        id: 'p_' + Date.now(),
+        acronym: document.getElementById('newPrjAcr').value.trim(),
+        name: document.getElementById('newPrjName').value.trim(),
+        tag: document.getElementById('newPrjTag').value.trim() || 'Research Track',
+        status: document.getElementById('newPrjStatus').value.trim() || 'Active',
+        color: 'cyan',
+        summary: document.getElementById('newPrjSummary').value.trim(),
+        param1: document.getElementById('newPrjP1').value.trim() || 'Active',
+        param2: document.getElementById('newPrjP2').value.trim() || 'Active',
+        footerInfo: document.getElementById('newPrjFoot').value.trim() || 'HawkEye QNeCT Lab'
+      };
+
+      labStore.projects.push(newPrj);
+      saveStore();
+      closeModal();
+      showToast("New project added to portfolio!");
+    }
+
+    function openEditProjectModal(id) {
+      const p = labStore.projects.find(item => item.id === id);
+      if (!p) return;
+
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Edit Project: ${p.acronym}</h3>
+        <form onsubmit="handleSaveEditedProject(event, '${p.id}')" class="space-y-3 font-mono text-xs">
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Acronym</label>
+              <input type="text" id="editPrjAcr" value="${p.acronym}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div class="col-span-2">
+              <label class="block text-gray-400 mb-1">Full Project Name</label>
+              <input type="text" id="editPrjName" value="${p.name}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Domain Tag</label>
+              <input type="text" id="editPrjTag" value="${p.tag}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Status Pill</label>
+              <input type="text" id="editPrjStatus" value="${p.status}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Summary Overview</label>
+            <textarea id="editPrjSummary" rows="3" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white">${p.summary}</textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Parameter 1</label>
+              <input type="text" id="editPrjP1" value="${p.param1}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Parameter 2</label>
+              <input type="text" id="editPrjP2" value="${p.param2}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Footer / Link Note</label>
+            <input type="text" id="editPrjFoot" value="${p.footerInfo}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Changes</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleSaveEditedProject(e, id) {
+      e.preventDefault();
+      const p = labStore.projects.find(item => item.id === id);
+      if (!p) return;
+
+      p.acronym = document.getElementById('editPrjAcr').value.trim();
+      p.name = document.getElementById('editPrjName').value.trim();
+      p.tag = document.getElementById('editPrjTag').value.trim();
+      p.status = document.getElementById('editPrjStatus').value.trim();
+      p.summary = document.getElementById('editPrjSummary').value.trim();
+      p.param1 = document.getElementById('editPrjP1').value.trim();
+      p.param2 = document.getElementById('editPrjP2').value.trim();
+      p.footerInfo = document.getElementById('editPrjFoot').value.trim();
+
+      saveStore();
+      closeModal();
+      showToast("Project details updated!");
+    }
+
+    function deleteProject(id) {
+      labStore.projects = labStore.projects.filter(p => p.id !== id);
+      saveStore();
+      showToast("Project removed.");
+    }
+
+    // Publication Handlers
+    function openAddPublicationModal() {
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Add Research Publication</h3>
+        <form onsubmit="handleAddPublication(event)" class="space-y-3 font-mono text-xs">
+          <div>
+            <label class="block text-gray-400 mb-1">Paper Title *</label>
+            <input type="text" id="newPubTitle" required placeholder="Continuous-Variable Bell State Measurement" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Journal &amp; Year *</label>
+              <input type="text" id="newPubTag" required placeholder="Phys. Rev. Lett. 2026" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">DOI String</label>
+              <input type="text" id="newPubDoi" placeholder="DOI: 10.1103/PhysRevLett..." class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Author List *</label>
+            <input type="text" id="newPubAuthors" required placeholder="A. Sengupta, N. Rao, V. Sharma, et al." class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">BibTeX Citation Key</label>
+            <input type="text" id="newPubBib" placeholder="sengupta2026paper" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Paper</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleAddPublication(e) {
+      e.preventDefault();
+      const newPub = {
+        id: 'pub_' + Date.now(),
+        title: document.getElementById('newPubTitle').value.trim(),
+        tag: document.getElementById('newPubTag').value.trim(),
+        doi: document.getElementById('newPubDoi').value.trim() || 'DOI: 10.1103/PhysRevLett',
+        authors: document.getElementById('newPubAuthors').value.trim(),
+        bibtexKey: document.getElementById('newPubBib').value.trim() || 'hawkeye_paper_' + Date.now()
+      };
+
+      labStore.publications.push(newPub);
+      saveStore();
+      closeModal();
+      showToast("Publication record registered!");
+    }
+
+    function openEditPublicationModal(id) {
+      const pub = labStore.publications.find(item => item.id === id);
+      if (!pub) return;
+
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <h3 class="text-lg font-bold text-white font-mono mb-4">Edit Publication</h3>
+        <form onsubmit="handleSaveEditedPublication(event, '${pub.id}')" class="space-y-3 font-mono text-xs">
+          <div>
+            <label class="block text-gray-400 mb-1">Paper Title</label>
+            <input type="text" id="editPubTitle" value="${pub.title}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-gray-400 mb-1">Journal &amp; Year</label>
+              <input type="text" id="editPubTag" value="${pub.tag}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">DOI String</label>
+              <input type="text" id="editPubDoi" value="${pub.doi}" class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Author List</label>
+            <input type="text" id="editPubAuthors" value="${pub.authors}" required class="w-full bg-void-950 border border-white/15 rounded-lg p-2 text-white" />
+          </div>
+          <div class="pt-3 flex justify-end gap-2">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-void-950 font-bold uppercase">Save Changes</button>
+          </div>
+        </form>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+    }
+
+    function handleSaveEditedPublication(e, id) {
+      e.preventDefault();
+      const pub = labStore.publications.find(item => item.id === id);
+      if (!pub) return;
+
+      pub.title = document.getElementById('editPubTitle').value.trim();
+      pub.tag = document.getElementById('editPubTag').value.trim();
+      pub.doi = document.getElementById('editPubDoi').value.trim();
+      pub.authors = document.getElementById('editPubAuthors').value.trim();
+
+      saveStore();
+      closeModal();
+      showToast("Publication updated!");
+    }
+
+    function deletePublication(id) {
+      labStore.publications = labStore.publications.filter(p => p.id !== id);
+      saveStore();
+      showToast("Publication deleted.");
+    }
+
+    // Export / Import / Reset System
+    function exportDataJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(labStore, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "hawkeye_qnect_config.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Config exported as hawkeye_qnect_config.json");
+    }
+
+    function importDataJson(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          if (parsed && parsed.supervisor && parsed.team) {
+            labStore = parsed;
+            saveStore();
+            showToast("JSON Config imported successfully!");
+          } else {
+            showToast("Invalid config format.");
+          }
+        } catch(err) {
+          showToast("Error parsing JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetDataToDefault() {
+      labStore = JSON.parse(JSON.stringify(DEFAULT_STORE));
+      saveStore();
+      showToast("Reset to default lab records!");
+    }
+
+    // ========================================================
+    // 5. Interactive Quantum Canvas
+    // ========================================================
+    const canvas = document.getElementById('quantumCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    let mouse = { x: null, y: null, radius: 140 };
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initParticles();
+    }
+
+    class EntangledQubitParticle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.55;
+        this.vy = (Math.random() - 0.5) * 0.55;
+        this.radius = Math.random() * 2 + 1;
+        this.color = Math.random() > 0.4 ? '#00f5d4' : '#38bdf8';
+        this.phase = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.phase += 0.035;
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        if (mouse.x !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x += (dx / dist) * force * 1.4;
+            this.y += (dy / dist) * force * 1.4;
+          }
+        }
+      }
+
+      draw() {
+        const pulse = Math.sin(this.phase) * 0.35 + 1;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * pulse, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 5;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(Math.floor((width * height) / 17000), 70);
+      for (let i = 0; i < count; i++) {
+        particles.push(new EntangledQubitParticle());
+      }
+    }
+
+    function connectMesh() {
+      const maxDist = 125;
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a + 1; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDist) {
+            const alpha = (1 - dist / maxDist) * 0.22;
+            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateMesh() {
+      ctx.clearRect(0, 0, width, height);
+      connectMesh();
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateMesh);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    // ========================================================
+    // 6. Simulator Workspace
+    // ========================================================
+    function updateSimulator() {
+      const dist = parseFloat(document.getElementById('distanceSlider').value);
+      const noise = parseFloat(document.getElementById('noiseSlider').value);
+
+      document.getElementById('distanceDisplay').innerText = `${dist} km`;
+      document.getElementById('noiseDisplay').innerText = noise.toFixed(2);
+
+      const fidelity = Math.max(0.65, (1 - noise * 0.75) * Math.exp(-0.0019 * dist));
+      const purity = Math.max(0.50, Math.pow(fidelity, 1.8));
+      const chsh = Math.min(2.828, Math.max(1.5, 2 * Math.sqrt(2) * (2 * fidelity - 1)));
+
+      document.getElementById('simFidelity').innerText = fidelity.toFixed(3);
+      document.getElementById('simPurity').innerText = purity.toFixed(3);
+      document.getElementById('simChsh').innerText = chsh.toFixed(2);
+
+      const codeDist = document.getElementById('codeDist');
+      const codeNoise = document.getElementById('codeNoise');
+      if (codeDist) codeDist.innerText = dist;
+      if (codeNoise) codeNoise.innerText = noise.toFixed(2);
+    }
+
+    function copyPythonCode() {
+      const dist = document.getElementById('distanceSlider').value;
+      const noise = document.getElementById('noiseSlider').value;
+      const py = `import qnect as qn
+
+# Configure HawkEye QNeCT simulation network
+net = qn.QuantumNetwork(name="HawkEye-Urban-Link")
+alice = net.add_node("Alice", memory_type="87Rb")
+bob = net.add_node("Bob", memory_type="87Rb")
+
+# Link fiber parameters
+link = net.connect_nodes(alice, bob, distance_km=${dist}, loss_db_km=0.20)
+link.apply_noise(qn.noise.DepolarizingChannel(gamma=${noise}))
+
+# Execute entanglement swapping & measure state
+rho = net.run_swapping_protocol(fidelity_threshold=0.85)
+print(f"Bell Fidelity: {rho.fidelity():.4f}")`;
+
+      const el = document.createElement('textarea');
+      el.value = py;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      showToast("QNeCT Python script copied to clipboard!");
+    }
+
+    // ========================================================
+    // 7. Modals & Dossier Display
+    // ========================================================
+    function openMemberDossier(id) {
+      const m = labStore.team.find(item => item.id === id);
+      if (!m) return;
+
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <div class="mb-4">
+          <span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-mono border border-cyan-400/40 bg-cyan-500/10 text-cyan-300 mb-2">${m.role}</span>
+          <h2 class="text-xl font-bold text-white font-mono">${m.name}</h2>
+          <p class="text-xs font-mono text-gray-400 mt-0.5">${m.topic}</p>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/10 text-xs font-mono text-gray-300 space-y-3">
+          <p>${m.description}</p>
+          <div class="p-3 bg-void-950 rounded-xl border border-white/10 flex items-center justify-between">
+            <span class="text-gray-400">Institutional Contact:</span>
+            <a href="mailto:${m.email}" class="text-cyan-300 hover:underline">${m.email}</a>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/10 flex justify-between">
+          <button onclick="openEditMemberModal('${m.id}')" class="text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1">
+            <i class="ph-bold ph-pencil"></i> Edit Member
+          </button>
+          <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-mono font-bold text-white">Dismiss</button>
+        </div>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openProjectDossier(id) {
+      const p = labStore.projects.find(item => item.id === id);
+      if (!p) return;
+
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <div class="mb-4">
+          <span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-mono border border-sky-400/40 bg-sky-500/10 text-sky-300 mb-2">${p.tag} &bull; ${p.status}</span>
+          <h2 class="text-xl font-bold text-white font-mono">${p.acronym}: ${p.name}</h2>
+          <p class="text-xs font-mono text-gray-400 mt-0.5">${p.footerInfo}</p>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/10 text-xs font-mono text-gray-300 space-y-3">
+          <p>${p.summary}</p>
+          <div class="p-3 bg-void-950 rounded-xl border border-white/10 space-y-1">
+            <div class="flex justify-between"><span class="text-gray-400">Metric 1:</span> <span class="text-cyan-300">${p.param1}</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Metric 2:</span> <span class="text-emerald-400">${p.param2}</span></div>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/10 flex justify-between">
+          <button onclick="openEditProjectModal('${p.id}')" class="text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1">
+            <i class="ph-bold ph-pencil"></i> Edit Project
+          </button>
+          <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-mono font-bold text-white">Dismiss</button>
+        </div>
+      `;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openModal(key) {
+      if (key === 'supervisor-detail') {
+        const s = labStore.supervisor;
+        const modal = document.getElementById('detailModal');
+        const box = document.getElementById('modalBox');
+        const content = document.getElementById('modalContent');
+
+        content.innerHTML = `
+          <div class="mb-4">
+            <span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-mono border border-cyan-400/40 bg-cyan-500/10 text-cyan-300 mb-2">Lead Investigator</span>
+            <h2 class="text-xl font-bold text-white font-mono">${s.name}</h2>
+            <p class="text-xs font-mono text-gray-400 mt-0.5">${s.role}</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-white/10 text-xs font-mono text-gray-300 space-y-3">
+            <p><strong>Credentials:</strong> ${s.credentials}</p>
+            <p>${s.bio}</p>
+            <div class="p-3 bg-void-950 rounded-xl border border-white/10 space-y-1">
+              <div class="text-white font-bold">Public Key Verification:</div>
+              <div class="text-gray-400">PGP Key Fingerprint:</div>
+              <div class="text-cyan-300 text-[11px] select-all">${s.pgp}</div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-white/10 flex justify-between">
+            <button onclick="toggleAdminPanel(); closeModal(); switchAdminTab('tab-supervisor');" class="text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1">
+              <i class="ph-bold ph-pencil"></i> Edit Supervisor Details
+            </button>
+            <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-mono font-bold text-white">Dismiss</button>
+          </div>
+        `;
+
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('detailModal');
+      const box = document.getElementById('modalBox');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      box.classList.add('scale-95');
+      box.classList.remove('scale-100');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('detailModal')) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        const overlay = document.getElementById('adminOverlay');
+        if (!overlay.classList.contains('pointer-events-none')) toggleAdminPanel();
+      }
+    });
+
+    // ========================================================
+    // 8. Utilities & Forms
+    // ========================================================
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    function copyBibtex(id) {
+      const bibtex = `@article{hawkeye_qnect_${id},
+  author = {Sengupta, Arindam and Rao, Niharika and Sharma, Vikramaditya and HawkEye QNeCT},
+  title = {Quantum Network & Communication Toolbox Research},
+  journal = {Physical Review Letters},
+  year = {2025}
+}`;
+      const el = document.createElement('textarea');
+      el.value = bibtex;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      showToast("BibTeX record copied to clipboard!");
+    }
+
+    function copyPgpFingerprint() {
+      const fp = labStore.supervisor.pgp;
+      const el = document.createElement('textarea');
+      el.value = fp;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      showToast("PI PGP Key Fingerprint copied!");
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const feedback = document.getElementById('formFeedback');
+      const name = document.getElementById('senderName').value;
+
+      btn.disabled = true;
+      btn.innerText = "Transmitting to Laboratory Server...";
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerText = "Transmit Inquiry to Lab";
+        feedback.className = "p-3 rounded-xl text-xs font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 block";
+        feedback.innerText = `Thank you, ${name}. Your inquiry has been routed to the HawkEye QNeCT research coordinator.`;
+        document.getElementById('contactForm').reset();
+        showToast("Inquiry successfully delivered!");
+      }, 1200);
+    }
+
+    // Mobile Menu
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          menuIcon.className = 'ph ph-x';
+        } else {
+          mobileMenu.classList.add('hidden');
+          menuIcon.className = 'ph ph-list';
+        }
+      });
+
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuIcon.className = 'ph ph-list';
+        });
+      });
+    }
+
+    // Team Filter Trigger
+    document.querySelectorAll('#teamFilterContainer .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#teamFilterContainer .filter-btn').forEach(b => {
+          b.className = 'filter-btn px-3.5 py-1.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white hover:bg-white/5 transition-all';
+        });
+        btn.className = 'filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all bg-gradient-to-r from-cyan-400 to-sky-600 text-void-950 font-bold shadow-sm';
+
+        const filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.team-card').forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ========================================================
+    // 9. Startup Initialization
+    // ========================================================
+    window.onload = function() {
+      resizeCanvas();
+      animateMesh();
+      renderAll();
+      updateSimulator();
+      runHawkEyeTelemetry();
+    };
+  </script>
+
+</body>
+</html>
